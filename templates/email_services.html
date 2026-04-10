@@ -378,6 +378,30 @@
                         </div>
                     </div>
                     <!-- IMAP 字段 -->
+                    <div id="add-cloudmail-fields" style="display:none;">
+                        <div class="form-group">
+                            <label for="custom-cm-base-url">API URL</label>
+                            <input type="text" id="custom-cm-base-url" name="cm_base_url" placeholder="https://cloudmail.example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-cm-admin-email">Admin Email (optional)</label>
+                            <input type="email" id="custom-cm-admin-email" name="cm_admin_email" placeholder="admin@example.com">
+                            <small style="color: var(--text-muted);">Leave blank to auto-use <code>admin@domain</code>.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-cm-admin-password">Admin Password</label>
+                            <input type="password" id="custom-cm-admin-password" name="cm_admin_password" placeholder="CloudMail admin password">
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-cm-domain">Domain</label>
+                            <input type="text" id="custom-cm-domain" name="cm_domain" placeholder="example.com, backup.example.com">
+                            <small style="color: var(--text-muted);">Use commas for multiple domains. CloudMail uses catch-all aliases and will not pre-create mailbox users.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="custom-cm-subdomain">Subdomain (optional)</label>
+                            <input type="text" id="custom-cm-subdomain" name="cm_subdomain" placeholder="mail">
+                        </div>
+                    </div>
                     <div id="add-imap-fields" style="display:none;">
                         <div class="form-group">
                             <label for="custom-imap-host">IMAP 服务器</label>
@@ -404,32 +428,6 @@
                         <div class="form-group">
                             <label for="custom-imap-password">密码 / 授权码</label>
                             <input type="password" id="custom-imap-password" name="imap_password" placeholder="Gmail 需使用 App Password，QQ/163 需使用授权码">
-                        </div>
-                    </div>
-                    <!-- CloudMail 字段 -->
-                    <div id="add-cloudmail-fields" style="display:none;">
-                        <div class="form-group">
-                            <label for="custom-cm-base-url">API 地址</label>
-                            <input type="text" id="custom-cm-base-url" name="cm_base_url" placeholder="https://mail.example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="custom-cm-admin-password">管理员密码</label>
-                            <input type="password" id="custom-cm-admin-password" name="cm_admin_password" placeholder="管理员邮箱密码">
-                        </div>
-                        <div class="form-group">
-                            <label for="custom-cm-admin-email">管理员邮箱（可选）</label>
-                            <input type="email" id="custom-cm-admin-email" name="cm_admin_email" placeholder="admin@example.com">
-                            <small style="color: var(--text-muted);">留空则自动使用 admin@域名</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="custom-cm-domain">邮箱域名（可选）</label>
-                            <input type="text" id="custom-cm-domain" name="cm_domain" placeholder="example.com 或 domain1.com,domain2.com">
-                            <small style="color: var(--text-muted);">支持多个域名，用英文逗号分隔。留空则从 API 地址提取</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="custom-cm-subdomain">子域（可选）</label>
-                            <input type="text" id="custom-cm-subdomain" name="cm_subdomain" placeholder="test">
-                            <small style="color: var(--text-muted);">例如填写 "test"，生成的邮箱为 xxx@test.example.com</small>
                         </div>
                     </div>
                     <div class="form-row">
@@ -609,6 +607,31 @@
                         </div>
                     </div>
                     <!-- IMAP 字段 -->
+                    <div id="edit-cloudmail-fields" style="display:none;">
+                        <div class="form-group">
+                            <label for="edit-cm-base-url">API URL</label>
+                            <input type="text" id="edit-cm-base-url" name="cm_base_url" placeholder="https://cloudmail.example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cm-admin-email">Admin Email (optional)</label>
+                            <input type="email" id="edit-cm-admin-email" name="cm_admin_email" placeholder="admin@example.com">
+                            <small style="color: var(--text-muted);">Leave blank to auto-use <code>admin@domain</code>.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cm-admin-password">Admin Password</label>
+                            <input type="password" id="edit-cm-admin-password" name="cm_admin_password" placeholder="Leave blank to keep current password">
+                            <small style="color: var(--text-muted);">Leave blank to keep the existing password.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cm-domain">Domain</label>
+                            <input type="text" id="edit-cm-domain" name="cm_domain" placeholder="example.com, backup.example.com">
+                            <small style="color: var(--text-muted);">Use commas for multiple domains. CloudMail uses catch-all aliases and will not pre-create mailbox users.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cm-subdomain">Subdomain (optional)</label>
+                            <input type="text" id="edit-cm-subdomain" name="cm_subdomain" placeholder="mail">
+                        </div>
+                    </div>
                     <div id="edit-imap-fields" style="display:none;">
                         <div class="form-group">
                             <label for="edit-imap-host">IMAP 服务器</label>
@@ -635,33 +658,6 @@
                             <label for="edit-imap-password">密码 / 授权码</label>
                             <input type="password" id="edit-imap-password" name="imap_password" placeholder="留空则保持原值不变">
                             <small style="color: var(--text-muted);">留空则保持原值不变</small>
-                        </div>
-                    </div>
-                    <!-- CloudMail 字段 -->
-                    <div id="edit-cloudmail-fields" style="display:none;">
-                        <div class="form-group">
-                            <label for="edit-cm-base-url">API 地址</label>
-                            <input type="text" id="edit-cm-base-url" name="cm_base_url" placeholder="https://mail.example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-cm-admin-password">管理员密码</label>
-                            <input type="password" id="edit-cm-admin-password" name="cm_admin_password" placeholder="留空则不修改">
-                            <small style="color: var(--text-muted);">留空则保持原值不变</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-cm-admin-email">管理员邮箱（可选）</label>
-                            <input type="email" id="edit-cm-admin-email" name="cm_admin_email" placeholder="admin@example.com">
-                            <small style="color: var(--text-muted);">留空则自动使用 admin@域名</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-cm-domain">邮箱域名（可选）</label>
-                            <input type="text" id="edit-cm-domain" name="cm_domain" placeholder="example.com">
-                            <small style="color: var(--text-muted);">支持多个域名，用英文逗号分隔。留空则从 API 地址提取</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit-cm-subdomain">子域（可选）</label>
-                            <input type="text" id="edit-cm-subdomain" name="cm_subdomain" placeholder="test">
-                            <small style="color: var(--text-muted);">例如填写 "test"，生成的邮箱为 xxx@test.example.com</small>
                         </div>
                     </div>
                     <div class="form-row">
@@ -740,4 +736,3 @@
     {% include "partials/site_footer.html" %}
 </body>
 </html>
-

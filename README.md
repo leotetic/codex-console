@@ -269,14 +269,14 @@ docker-compose up -d
 你可以在 `docker-compose.yml` 中修改环境变量，比如端口和访问密码。  
 如果需要看“全自动绑卡”的可视化浏览器，打开：
 
-- noVNC: `http://127.0.0.1:6080`
+- noVNC: `http://127.0.0.1:60807`
 
 ### 使用 docker run
 
 ```bash
 docker run -d \
   -p 1455:1455 \
-  -p 6080:6080 \
+  -p 60807:6080 \
   -e DISPLAY=:99 \
   -e ENABLE_VNC=1 \
   -e VNC_PORT=5900 \
@@ -296,6 +296,7 @@ docker run -d \
 - `WEBUI_ACCESS_PASSWORD`: Web UI 访问密码
 - `DEBUG`: 设为 `1` 或 `true` 可开启调试模式
 - `LOG_LEVEL`: 日志级别，例如 `info`、`debug`
+- Windows 下如果 `6080` 宿主机端口被系统保留，建议改用 `60807:6080` 这类高位端口映射
 
 注意：
 

@@ -1148,7 +1148,7 @@ body {
 
 .tab-content {
     display: none;
-    animation: fadeIn 0.2s ease;
+    animation: none;
 }
 
 .tab-content.active {
@@ -1164,7 +1164,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
+    backdrop-filter: none;
     z-index: 1000;
     align-items: center;
     justify-content: center;
@@ -1173,7 +1173,7 @@ body {
 
 .modal.active {
     display: flex;
-    animation: fadeIn 0.2s ease;
+    animation: none;
 }
 
 .modal-content {
@@ -1184,7 +1184,7 @@ body {
     max-height: 85vh;
     overflow: hidden;
     box-shadow: var(--shadow-lg);
-    animation: slideUp 0.3s ease;
+    animation: none;
 }
 
 @keyframes slideUp {
@@ -1415,7 +1415,7 @@ body {
         var(--surface-hover) 50%,
         var(--border) 75%);
     background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
+    animation: none;
     border-radius: var(--radius-sm);
 }
 

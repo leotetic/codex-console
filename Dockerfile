@@ -40,7 +40,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 # 复制项目代码
 COPY . .
 COPY scripts/docker/start-webui.sh /app/scripts/docker/start-webui.sh
-RUN chmod +x /app/scripts/docker/start-webui.sh
+RUN sed -i 's/\r$//' /app/scripts/docker/start-webui.sh \
+    && chmod +x /app/scripts/docker/start-webui.sh
 
 # 暴露端口
 EXPOSE 1455
@@ -48,4 +49,4 @@ EXPOSE 6080
 EXPOSE 5900
 
 # 启动 WebUI
-CMD ["/app/scripts/docker/start-webui.sh"]
+CMD ["bash", "/app/scripts/docker/start-webui.sh"]
