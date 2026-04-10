@@ -567,10 +567,20 @@ class HotmailService(BaseEmailService):
     def check_health(self) -> bool:
         """检查服务健康状态"""
         try:
-            self._start_browser()
-            page = self._context.new_page()
-            page.goto("https://signup.live.com/", timeout=10000)
-            page.close()
+            # 轻量级健康检查：只验证配置和模块是否正确
+            if not self.config.get("domain"):
+                logger.warning("Hotmail 服务未配置域名")
+                self.update_status(False, Exception("未配置域名"))
+                return False
+
+            # 验证 Playwright 模块可用
+            try:
+                from playwright.sync_api import sync_playwright
+            except ImportError:
+                logger.warning("Playwright 模块未安装")
+                self.update_status(False, Exception("Playwright 模块未安装"))
+                return False
+
             self.update_status(True)
             return True
         except Exception as e:
