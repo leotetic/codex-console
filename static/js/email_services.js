@@ -62,6 +62,7 @@ const elements = {
     addFreemailFields: document.getElementById('add-freemail-fields'),
     addCloudmailFields: document.getElementById('add-cloudmail-fields'),
     addImapFields: document.getElementById('add-imap-fields'),
+    addHotmailFields: document.getElementById('add-hotmail-fields'),
 
     // 编辑自定义域名模态框
     editCustomModal: document.getElementById('edit-custom-modal'),
@@ -77,6 +78,7 @@ const elements = {
     editFreemailFields: document.getElementById('edit-freemail-fields'),
     editCloudmailFields: document.getElementById('edit-cloudmail-fields'),
     editImapFields: document.getElementById('edit-imap-fields'),
+    editHotmailFields: document.getElementById('edit-hotmail-fields'),
     editCustomTypeBadge: document.getElementById('edit-custom-type-badge'),
     editCustomSubTypeHidden: document.getElementById('edit-custom-sub-type-hidden'),
 
@@ -96,7 +98,8 @@ const CUSTOM_SUBTYPE_LABELS = {
     duckmail: '🦆 DuckMail（DuckMail API）',
     luckmail: 'LuckMail（接码平台）',
     freemail: 'Freemail（自部署 Cloudflare Worker）',
-    imap: '📧 IMAP 邮箱（Gmail/QQ/163等）'
+    imap: '📧 IMAP 邮箱（Gmail/QQ/163等）',
+    hotmail: '🔥 Hotmail（Microsoft 账号自动注册）'
 };
 
 // 初始化
@@ -208,6 +211,7 @@ function switchAddSubType(subType) {
     elements.addFreemailFields.style.display = subType === 'freemail' ? '' : 'none';
     elements.addCloudmailFields.style.display = subType === 'cloudmail' ? '' : 'none';
     elements.addImapFields.style.display = subType === 'imap' ? '' : 'none';
+    elements.addHotmailFields.style.display = subType === 'hotmail' ? '' : 'none';
 }
 
 // 切换编辑表单子类型显示
@@ -222,6 +226,7 @@ function switchEditSubType(subType) {
     elements.editFreemailFields.style.display = subType === 'freemail' ? '' : 'none';
     elements.editCloudmailFields.style.display = subType === 'cloudmail' ? '' : 'none';
     elements.editImapFields.style.display = subType === 'imap' ? '' : 'none';
+    elements.editHotmailFields.style.display = subType === 'hotmail' ? '' : 'none';
     elements.editCustomTypeBadge.textContent = CUSTOM_SUBTYPE_LABELS[subType] || CUSTOM_SUBTYPE_LABELS.moemail;
 }
 
@@ -585,7 +590,7 @@ async function handleAddCustom(e) {
             domain: formData.get('fm_domain')
         };
     } else if (subType === 'cloudmail') {
-        serviceType = 'cloud_mail';
+        serviceType = 'cloudmail';
         const domainInput = formData.get('cm_domain');
         let domain = domainInput;
         if (domainInput && domainInput.includes(',')) {
@@ -600,6 +605,18 @@ async function handleAddCustom(e) {
         const subdomain = formData.get('cm_subdomain');
         if (subdomain && subdomain.trim()) {
             config.subdomain = subdomain.trim();
+        }
+    } else if (subType === 'hotmail') {
+        serviceType = 'hotmail';
+        config = {
+            domain: formData.get('hm_domain') || 'outlook.com',
+            proxy_url: formData.get('hm_proxy_url') || null,
+            backup_email_service: formData.get('hm_backup_service') || null,
+            headless: formData.get('hm_headless') !== 'false'
+        };
+        const backupConfig = formData.get('hm_backup_config');
+        if (backupConfig && backupConfig.trim()) {
+            config.backup_email_config = JSON.parse(backupConfig);
         }
     } else {
         serviceType = 'imap_mail';
@@ -793,7 +810,9 @@ async function editCustomService(id, subType) {
                         ? 'freemail'
                         : service.service_type === 'imap_mail'
                             ? 'imap'
-                            : 'moemail'
+                            : service.service_type === 'hotmail'
+                                ? 'hotmail'
+                                : 'moemail'
         );
 
         document.getElementById('edit-custom-id').value = service.id;
@@ -851,6 +870,14 @@ async function editCustomService(id, subType) {
             const domainStr = Array.isArray(domain) ? domain.join(', ') : (domain || '');
             document.getElementById('edit-cm-domain').value = domainStr;
             document.getElementById('edit-cm-subdomain').value = service.config?.subdomain || '';
+        } else if (resolvedSubType === 'hotmail') {
+            document.getElementById('edit-hm-domain').value = service.config?.domain || 'outlook.com';
+            document.getElementById('edit-hm-proxy-url').value = service.config?.proxy_url || '';
+            document.getElementById('edit-hm-proxy-url').placeholder = service.config?.proxy_url ? '已设置' : 'http://proxy:port（可选）';
+            document.getElementById('edit-hm-backup-service').value = service.config?.backup_email_service || '';
+            document.getElementById('edit-hm-backup-config').value = service.config?.backup_email_config ? JSON.stringify(service.config.backup_email_config) : '';
+            document.getElementById('edit-hm-backup-config').placeholder = '备用邮箱配置 JSON（可选）';
+            document.getElementById('edit-hm-headless').checked = service.config?.headless !== false;
         } else {
             document.getElementById('edit-imap-host').value = service.config?.host || '';
             document.getElementById('edit-imap-port').value = service.config?.port || 993;
@@ -947,6 +974,23 @@ async function handleEditCustom(e) {
         }
         const pwd = formData.get('cm_admin_password');
         if (pwd && pwd.trim()) config.admin_password = pwd.trim();
+    } else if (subType === 'hotmail') {
+        config = {
+            domain: formData.get('hm_domain') || 'outlook.com',
+            headless: formData.get('hm_headless') !== 'false'
+        };
+        const proxyUrl = formData.get('hm_proxy_url');
+        if (proxyUrl && proxyUrl.trim()) config.proxy_url = proxyUrl.trim();
+        const backupService = formData.get('hm_backup_service');
+        if (backupService && backupService.trim()) config.backup_email_service = backupService.trim();
+        const backupConfig = formData.get('hm_backup_config');
+        if (backupConfig && backupConfig.trim()) {
+            try {
+                config.backup_email_config = JSON.parse(backupConfig);
+            } catch (e) {
+                // ignore invalid JSON
+            }
+        }
     } else {
         config = {
             host: formData.get('imap_host'),

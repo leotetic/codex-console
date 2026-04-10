@@ -62,6 +62,7 @@ class EmailServiceType(str, Enum):
     FREEMAIL = "freemail"
     IMAP_MAIL = "imap_mail"
     CLOUDMAIL = "cloudmail"
+    HOTMAIL = "hotmail"
 
 
 def normalize_account_label(value: str) -> str:
