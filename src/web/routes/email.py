@@ -204,6 +204,7 @@ async def get_email_services_stats():
             'imap_mail_count': 0,
             'cloudmail_count': 0,
             'luckmail_count': 0,
+            'hotmail_count': 0,
             'tempmail_available': tempmail_enabled or yyds_enabled,
             'yyds_mail_available': yyds_enabled,
             'enabled_count': enabled_count
@@ -230,6 +231,8 @@ async def get_email_services_stats():
                 stats['cloudmail_count'] = count
             elif service_type == 'luckmail':
                 stats['luckmail_count'] = count
+            elif service_type == 'hotmail':
+                stats['hotmail_count'] = count
 
         return stats
 

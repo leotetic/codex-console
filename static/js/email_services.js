@@ -235,7 +235,7 @@ async function loadStats() {
     try {
         const data = await api.get('/email-services/stats');
         elements.outlookCount.textContent = data.outlook_count || 0;
-        elements.customCount.textContent = (data.custom_count || 0) + (data.tempmail_builtin_count || 0) + (data.yyds_mail_count || 0) + (data.temp_mail_count || 0) + (data.cloudmail_count || 0) + (data.duck_mail_count || 0) + (data.luckmail_count || 0) + (data.freemail_count || 0) + (data.imap_mail_count || 0);
+        elements.customCount.textContent = (data.custom_count || 0) + (data.tempmail_builtin_count || 0) + (data.yyds_mail_count || 0) + (data.temp_mail_count || 0) + (data.cloudmail_count || 0) + (data.duck_mail_count || 0) + (data.luckmail_count || 0) + (data.freemail_count || 0) + (data.imap_mail_count || 0) + (data.hotmail_count || 0);
         elements.tempmailStatus.textContent = data.tempmail_available ? '可用' : '不可用';
         elements.totalEnabled.textContent = data.enabled_count || 0;
     } catch (error) {
@@ -388,10 +388,10 @@ function getCustomServiceAddress(service) {
     return `${escapeHtml(baseUrl)}<div style="color: var(--text-muted); margin-top: 4px;">默认域名：@${escapeHtml(domain)}</div>`;
 }
 
-// 加载自定义邮箱服务（moe_mail + temp_mail + cloudmail + duck_mail + freemail + imap_mail 合并）
+// 加载自定义邮箱服务（moe_mail + temp_mail + cloudmail + duck_mail + freemail + imap_mail + hotmail 合并）
 async function loadCustomServices() {
     try {
-        const [r1, r2, r3, r4, r5, r6, r7, r8, r9] = await Promise.all([
+        const [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10] = await Promise.all([
             api.get('/email-services?service_type=moe_mail'),
             api.get('/email-services?service_type=tempmail'),
             api.get('/email-services?service_type=yyds_mail'),
@@ -400,7 +400,8 @@ async function loadCustomServices() {
             api.get('/email-services?service_type=duck_mail'),
             api.get('/email-services?service_type=luckmail'),
             api.get('/email-services?service_type=freemail'),
-            api.get('/email-services?service_type=imap_mail')
+            api.get('/email-services?service_type=imap_mail'),
+            api.get('/email-services?service_type=hotmail')
         ]);
         customServices = [
             ...(r1.services || []).map(s => ({ ...s, _subType: 'moemail' })),
@@ -411,7 +412,8 @@ async function loadCustomServices() {
             ...(r6.services || []).map(s => ({ ...s, _subType: 'duckmail' })),
             ...(r7.services || []).map(s => ({ ...s, _subType: 'luckmail' })),
             ...(r8.services || []).map(s => ({ ...s, _subType: 'freemail' })),
-            ...(r9.services || []).map(s => ({ ...s, _subType: 'imap' }))
+            ...(r9.services || []).map(s => ({ ...s, _subType: 'imap' })),
+            ...(r10.services || []).map(s => ({ ...s, _subType: 'hotmail' }))
         ];
 
         if (customServices.length === 0) {
