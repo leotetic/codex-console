@@ -1988,6 +1988,11 @@ async def get_available_email_services():
             "available": False,
             "count": 0,
             "services": []
+        },
+        "hotmail": {
+            "available": False,
+            "count": 0,
+            "services": []
         }
     }
 
@@ -2183,6 +2188,25 @@ async def get_available_email_services():
 
         result["luckmail"]["count"] = len(luckmail_services)
         result["luckmail"]["available"] = len(luckmail_services) > 0
+
+        # 获取 Hotmail 服务
+        hotmail_services = db.query(EmailServiceModel).filter(
+            EmailServiceModel.service_type == "hotmail",
+            EmailServiceModel.enabled == True
+        ).order_by(EmailServiceModel.priority.asc()).all()
+
+        for service in hotmail_services:
+            config = service.config or {}
+            result["hotmail"]["services"].append({
+                "id": service.id,
+                "name": service.name,
+                "type": "hotmail",
+                "domain": config.get("domain"),
+                "priority": service.priority
+            })
+
+        result["hotmail"]["count"] = len(hotmail_services)
+        result["hotmail"]["available"] = len(hotmail_services) > 0
 
     return result
 

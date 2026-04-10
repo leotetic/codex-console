@@ -34,7 +34,8 @@ let availableServices = {
     duck_mail: { available: false, services: [] },
     luckmail: { available: false, services: [] },
     freemail: { available: false, services: [] },
-    imap_mail: { available: false, services: [] }
+    imap_mail: { available: false, services: [] },
+    hotmail: { available: false, services: [] }
 };
 
 // WebSocket 相关变量
@@ -525,6 +526,23 @@ function updateEmailServiceOptions() {
             option.value = `imap_mail:${service.id}`;
             option.textContent = service.name + (service.email ? ` (${service.email})` : '');
             option.dataset.type = 'imap_mail';
+            option.dataset.serviceId = service.id;
+            optgroup.appendChild(option);
+        });
+
+        select.appendChild(optgroup);
+    }
+
+    // Hotmail
+    if (availableServices.hotmail && availableServices.hotmail.available) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = `🔥 Hotmail (${availableServices.hotmail.count} 个服务)`;
+
+        availableServices.hotmail.services.forEach(service => {
+            const option = document.createElement('option');
+            option.value = `hotmail:${service.id}`;
+            option.textContent = service.name + (service.domain ? ` (@${service.domain})` : '');
+            option.dataset.type = 'hotmail';
             option.dataset.serviceId = service.id;
             optgroup.appendChild(option);
         });
